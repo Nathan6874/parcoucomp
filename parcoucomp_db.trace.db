@@ -1,0 +1,4 @@
+2026-06-11 11:28:14.119752Z jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "[*]KNOCKOUT_PREDICTIONS MATCH_PREDICTIONS"
+Syntax error in SQL statement "[*]KNOCKOUT_PREDICTIONS MATCH_PREDICTIONS"; SQL statement:
+KNOCKOUT_PREDICTIONS MATCH_PREDICTIONS [42000-240]
