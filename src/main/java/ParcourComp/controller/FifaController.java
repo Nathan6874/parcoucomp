@@ -1,8 +1,10 @@
 package ParcourComp.controller;
 
 import ParcourComp.service.FifaApiService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/fifa")
@@ -39,5 +41,30 @@ public class FifaController {
         return matches.stream()
                 .filter(m -> ((String) m.get("utcDate")).startsWith(today))
                 .toList();
+    }
+
+    @GetMapping("/matches/finished")
+    public ResponseEntity<?> getFinishedMatches() {
+        try {
+            Map<String, Object> allMatches = fifaService.getWorldCupMatches();
+            List<Map<String, Object>> matches = (List) allMatches.get("matches");
+
+            if (matches == null) {
+                return ResponseEntity.ok(Map.of("matches", List.of(), "count", 0));
+            }
+
+            List<Map<String, Object>> finished = matches.stream()
+                    .filter(m -> "FINISHED".equals(m.get("status")))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(Map.of(
+                    "matches", finished,
+                    "count", finished.size(),
+                    "timestamp", System.currentTimeMillis()
+            ));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
     }
 }
